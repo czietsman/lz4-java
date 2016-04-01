@@ -19,6 +19,19 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+            pom.withXml {
+                def node = asNode()
+
+                node.appendNode('packaging', 'jar')
+                node.appendNode('name', 'Minimal LZ4 java')
+                node.appendNode('description', 'Minimal LZ4 java only library')
+                node.appendNode('url', 'https://github.com/czietsman/lz4-java')
+                def license = node.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'Apache License, Version 2.0')
+                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+                license.appendNode('distribution', 'repo')
+                node.appendNode('scm').appendNode('url', 'https://github.com/czietsman/lz4-java.git')
+            }
         }
     }
 }
