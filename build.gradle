@@ -1,9 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-group = 'io.github.czietsman'
+group = 'com.github.czietsman.lz4-java'
 version = '1.0'
 
 repositories {
@@ -12,6 +13,23 @@ repositories {
 
 dependencies {
     testCompile 'com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.0.9'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            // change to point to your repo, e.g. http://my.org/repo
+            url "$buildDir/repo"
+        }
+    }
 }
 
 task wrapper(type: Wrapper) {
