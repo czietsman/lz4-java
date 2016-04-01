@@ -1,7 +1,12 @@
-# LZ4 Java
+# Minimal LZ4 Java
 
-LZ4 compression for Java, based on Yann Collet's work available at
-http://code.google.com/p/lz4/.
+LZ4 compression for Java, which is based on Adrien Grand's work available 
+at https://github.com/jpountz/lz4-java which in turn is based Yann Collet's 
+work available at http://code.google.com/p/lz4/.
+
+All credit should go to the authors who contributed to the previously mentioned projects. 
+This is merely a repackaging of their work. Packages were renamed to limit confusion and 
+with no intent on claiming ownership in any regard.
 
 This library provides access to two compression methods that both generate a
 valid LZ4 stream:
@@ -22,29 +27,16 @@ decompressor instance.
 
 ## Implementations
 
-For LZ4 compressors, LZ4 HC compressors and decompressors, 3 implementations are
+For LZ4 compressors, LZ4 HC compressors and decompressors, only one implementation is
 available:
- - JNI bindings to the original C implementation by Yann Collet,
  - a pure Java port of the compression and decompression algorithms,
- - a Java port that uses the sun.misc.Unsafe API in order to achieve compression
-   and decompression speeds close to the C implementation.
 
 Have a look at LZ4Factory for more information.
-
-## Compatibility notes
-
- - Compressors and decompressors are interchangeable: it is perfectly correct
-   to compress with the JNI bindings and to decompress with a Java port, or the
-   other way around.
-
- - Compressors might not generate the same compressed streams on all platforms,
-   especially if CPU endianness differs, but the compressed streams can be
-   safely decompressed by any decompressor implementation on any platform.
 
 ## Example
 
 ```java
-LZ4Factory factory = LZ4Factory.fastestInstance();
+LZ4Factory factory = LZ4Factory.INSTANCE;
 
 byte[] data = "12345345234572".getBytes("UTF-8");
 final int decompressedLength = data.length;
@@ -78,7 +70,7 @@ score of 10) hash function.
 
 ## Implementations
 
-Similarly to LZ4, 3 implementations are available: JNI bindings, pure Java port
+Similarly to LZ4, 2 implementations are available: pure Java port
 and pure Java port that uses sun.misc.Unsafe.
 
 Have a look at XXHashFactory for more information.
@@ -92,7 +84,7 @@ Have a look at XXHashFactory for more information.
 ## Example
 
 ```java
-XXHashFactory factory = XXHashFactory.fastestInstance();
+XXHashFactory factory = XXHashFactory.INSTANCE;
 
 byte[] data = "12345345234572".getBytes("UTF-8");
 ByteArrayInputStream in = new ByteArrayInputStream(data);
@@ -113,51 +105,15 @@ int hash = hash32.getValue();
 
 # Download
 
-You can download released artifacts from [Maven Central](http://repo1.maven.org/maven2/net/jpountz/lz4/lz4/).
-
-# Documentation
-
- - [lz4](http://jpountz.github.com/lz4-java/1.2.0/docs/net/jpountz/lz4/package-summary.html)
- - [xxhash](http://jpountz.github.com/lz4-java/1.2.0/docs/net/jpountz/xxhash/package-summary.html)
- - [changelog](http://github.com/jpountz/lz4-java/blob/master/CHANGES.md)
-
-# Performance
-
-Both lz4 and xxhash focus on speed. Although compression, decompression and
-hashing performance can depend a lot on the input (there are lies, damn lies
-and benchmarks), here are some benchmarks that try to give a sense of the
-speed at which they compress/decompress/hash bytes.
-
- - [lz4 compression](http://jpountz.github.com/lz4-java/1.2.0/lz4-compression-benchmark/)
- - [lz4 decompression](http://jpountz.github.com/lz4-java/1.2.0/lz4-decompression-benchmark/)
- - [xxhash hashing](http://jpountz.github.com/lz4-java/1.2.0/xxhash-benchmark/)
+You can download released artifacts from [Maven Central](http://repo1.maven.org/maven2/net/czietsman/lz4/lz4/).
 
 # Build
 
 ## Requirements
 
- - JDK version 7 or newer,
- - ant,
- - ivy.
-
-If ivy is not installed yet, ant can take care of it for you, just run
-`ant ivy-bootstrap`. The library will be installed under ${user.home}/.ant/lib.
+ - JDK version 8 or newer,
+ - gradle 2.12 or newer.
 
 ## Instructions
 
-Then run `ant`. It will:
-
- - generate some Java source files in `build/java` from the templates that are
-   located under `src/build`,
- - compile the lz4 and xxhash libraries and their JNI (Java Native Interface)
-   bindings,
- - compile Java sources in `src/java` (normal sources), `src/java-unsafe`
-   (sources that make use of `sun.misc.Unsafe`) and `build/java`
-   (auto-generated sources) to `build/classes`, `build/unsafe-classes` and
-   `build/generated-classes`,
- - generate a JAR file called lz4-${version}.jar under the `dist` directory.
-
-The JAR file that is generated contains Java class files, the native library
-and the JNI bindings. If you add this JAR to your classpath, the native library
-will be copied to a temporary directory and dynamically linked to your Java
-application.
+Then run `gradlew build`.

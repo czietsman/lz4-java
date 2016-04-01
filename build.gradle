@@ -1,0 +1,19 @@
+apply plugin: 'java'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+group = 'io.github.czietsman'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.0.9'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.12'
+}
