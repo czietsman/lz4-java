@@ -4,7 +4,7 @@ apply plugin: 'maven-publish'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-group = 'com.github.czietsman.lz4-java'
+group = 'com.github.czietsman.lz4'
 version = '1.0'
 
 repositories {

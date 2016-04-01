@@ -1,7 +1,7 @@
 # Minimal LZ4 Java
 
 LZ4 compression for Java, which is based on Adrien Grand's work available 
-at https://github.com/jpountz/lz4-java which in turn is based Yann Collet's 
+at https://github.com/jpountz/lz4-java which in turn is based on Yann Collet's 
 work available at http://code.google.com/p/lz4/.
 
 All credit should go to the authors who contributed to the previously mentioned projects. 
@@ -116,4 +116,4 @@ You can download released artifacts from [Maven Central](http://repo1.maven.org/
 
 ## Instructions
 
-Then run `gradlew build`.
+Run `gradlew build`.
