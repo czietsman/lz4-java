@@ -18,23 +18,6 @@ import java.util.Random;
 
 /**
  * Entry point to get {@link XXHash32} and {@link StreamingXXHash32} instances.
- * <p>
- * This class has 3 instances<ul>
- * <li>a {@link #nativeInstance() native} instance which is a JNI binding to
- * <a href="http://code.google.com/p/xxhash/">the original LZ4 C implementation</a>.
- * <li>a {@link #safeInstance() safe Java} instance which is a pure Java port
- * of the original C library,</li>
- * <li>an {@link #unsafeInstance() unsafe Java} instance which is a Java port
- * using the unofficial {@link sun.misc.Unsafe} API.
- * </ul>
- * <p>
- * Only the {@link #safeInstance() safe instance} is guaranteed to work on your
- * JVM, as a consequence it is advised to use the {@link #fastestInstance()} or
- * {@link #fastestJavaInstance()} to pull a {@link XXHashFactory} instance.
- * <p>
- * All methods from this class are very costly, so you should get an instance
- * once, and then reuse it whenever possible. This is typically done by storing
- * a {@link XXHashFactory} instance in a static field.
  */
 public final class XXHashFactory {
 
@@ -73,24 +56,10 @@ public final class XXHashFactory {
     }
 
     /**
-     * Return the fastest available {@link XXHashFactory} instance. If the class
-     * loader is the system class loader and if the
-     * {@link #nativeInstance() native instance} loads successfully, then the
-     * {@link #nativeInstance() native instance} is returned, otherwise the
-     * {@link #fastestJavaInstance() fastest Java instance} is returned.
-     * <p>
-     * Please read {@link #nativeInstance() javadocs of nativeInstance()} before
-     * using this method.
-     */
-    public static XXHashFactory fastestInstance() {
-        return INSTANCE;
-    }
-
-    /**
      * Prints the fastest instance.
      */
     public static void main(String[] args) {
-        System.out.println("Fastest instance is " + fastestInstance());
+        System.out.println("Fastest instance is " + XXHashFactory.INSTANCE);
     }
 
     /**

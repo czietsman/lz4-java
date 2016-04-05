@@ -66,7 +66,7 @@ public final class LZ4BlockOutputStream extends FilterOutputStream {
      *
      * @param out        the {@link OutputStream} to feed
      * @param blockSize  the maximum number of bytes to try to compress at once,
-     *                   must be >= 64 and <= 32 M
+     *                   must be &gt;= 64 and &lt;= 32 M
      * @param compressor the {@link LZ4Compressor} instance to use to compress
      *                   data
      * @param checksum   the {@link Checksum} instance to use to check data for
@@ -96,7 +96,7 @@ public final class LZ4BlockOutputStream extends FilterOutputStream {
      * @see StreamingXXHash32#asChecksum()
      */
     public LZ4BlockOutputStream(OutputStream out, int blockSize, LZ4Compressor compressor) {
-        this(out, blockSize, compressor, XXHashFactory.fastestInstance().newStreamingHash32(DEFAULT_SEED).asChecksum(), false);
+        this(out, blockSize, compressor, XXHashFactory.INSTANCE.newStreamingHash32(DEFAULT_SEED).asChecksum(), false);
     }
 
     private static int compressionLevel(int blockSize) {

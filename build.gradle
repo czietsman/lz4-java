@@ -1,11 +1,19 @@
 apply plugin: 'java'
-apply plugin: 'maven-publish'
+//apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 group = 'com.github.czietsman.lz4'
 version = '1.0'
+
+jar {
+    manifest {
+        attributes("Implementation-Title": baseName, "Implementation-Version": version)
+    }
+}
 
 repositories {
     mavenCentral()
@@ -15,35 +23,93 @@ dependencies {
     testCompile 'com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.0.9'
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            pom.withXml {
-                def node = asNode()
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
 
-                node.appendNode('packaging', 'jar')
-                node.appendNode('name', 'Minimal LZ4 java')
-                node.appendNode('description', 'Minimal LZ4 java only library')
-                node.appendNode('url', 'https://github.com/czietsman/lz4-java')
-                def license = node.appendNode('licenses').appendNode('license')
-                license.appendNode('name', 'Apache License, Version 2.0')
-                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
-                license.appendNode('distribution', 'repo')
-                node.appendNode('scm').appendNode('url', 'https://github.com/czietsman/lz4-java.git')
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                packaging 'jar'
+                name 'Minimal LZ4 java'
+                description 'Minimal LZ4 java only library'
+                url 'https://github.com/czietsman/lz4-java'
+
+                scm {
+                    url 'https://github.com/czietsman/lz4-java.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'czietsman'
+                        name 'Christo Zietsman'
+                        email developerEmail
+                    }
+                }
             }
         }
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            // change to point to your repo, e.g. http://my.org/repo
-            url "$buildDir/repo"
-        }
-    }
-}
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.java
+//            pom.withXml {
+//                def node = asNode()
+//
+//                node.appendNode('packaging', 'jar')
+//                node.appendNode('name', 'Minimal LZ4 java')
+//                node.appendNode('description', 'Minimal LZ4 java only library')
+//                node.appendNode('url', 'https://github.com/czietsman/lz4-java')
+//                def license = node.appendNode('licenses').appendNode('license')
+//                license.appendNode('name', 'Apache License, Version 2.0')
+//                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+//                license.appendNode('distribution', 'repo')
+//                node.appendNode('scm').appendNode('url', 'https://github.com/czietsman/lz4-java.git')
+//            }
+//        }
+//    }
+//
+//    repositories {
+//        maven {
+//            // change to point to your repo, e.g. http://my.org/repo
+//            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+//        }
+//    }
+//}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.12'

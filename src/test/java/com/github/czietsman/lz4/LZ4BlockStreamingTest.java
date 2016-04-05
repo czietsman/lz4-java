@@ -180,7 +180,7 @@ public class LZ4BlockStreamingTest extends AbstractLZ4Test {
       checksum = new CRC32();
       break;
     default:
-      checksum = XXHashFactory.fastestInstance().newStreamingHash32(randomInt()).asChecksum();
+      checksum = XXHashFactory.INSTANCE.newStreamingHash32(randomInt()).asChecksum();
       break;
     }
     final boolean syncFlush = randomBoolean();
